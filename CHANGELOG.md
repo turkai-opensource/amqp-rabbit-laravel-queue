@@ -6,9 +6,13 @@ The format is based on [Keep a Changelog][keepachangelog] and this project adher
 
 ## Unreleased
 
-## Changed
+### Changed
 
 - Maximal `symfony/console` package versions now is `6.*`
+
+### Added
+
+- Tests for PHP `8.1` and `8.2` on CI
 
 ## v2.6.0
 
