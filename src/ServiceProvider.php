@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace AvtoDev\AmqpRabbitLaravelQueue;
 
+use AvtoDev\AmqpRabbitLaravelQueue\Horizon\Listeners\RabbitMQFailedEvent;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Contracts\Container\Container;
@@ -23,6 +24,7 @@ use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use AvtoDev\AmqpRabbitLaravelQueue\Failed\RabbitQueueFailedJobProvider;
 use Illuminate\Foundation\Console\JobMakeCommand as IlluminateJobMakeCommand;
 use Illuminate\Queue\Connectors\ConnectorInterface as IlluminateQueueConnector;
+use Laravel\Horizon\Events\JobFailed;
 
 class ServiceProvider extends IlluminateServiceProvider
 {
@@ -181,5 +183,6 @@ class ServiceProvider extends IlluminateServiceProvider
         $events->listen(ExchangeCreated::class, Listeners\CreateExchangeBind::class);
         $events->listen(ExchangeDeleting::class, Listeners\RemoveExchangeBind::class);
         $events->listen(JobProcessing::class, Listeners\BindJobStateListener::class);
+        $events->listen(JobFailed::class, RabbitMQFailedEvent::class);
     }
 }
