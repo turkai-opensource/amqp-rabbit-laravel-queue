@@ -4,12 +4,16 @@ declare(strict_types = 1);
 
 namespace AvtoDev\AmqpRabbitLaravelQueue;
 
+use AvtoDev\AmqpRabbitLaravelQueue\Horizon\RabbitMQQueue;
 use InvalidArgumentException;
 use Illuminate\Container\Container;
 use AvtoDev\AmqpRabbitManager\QueuesFactoryInterface;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 use AvtoDev\AmqpRabbitManager\ExchangesFactoryInterface;
 use AvtoDev\AmqpRabbitManager\ConnectionsFactoryInterface;
+use AvtoDev\AmqpRabbitLaravelQueue\Horizon\RabbitMQQueue as HorizonRabbitMQQueue;
+use Illuminate\Queue\Events\JobFailed;
+use AvtoDev\AmqpRabbitLaravelQueue\Horizon\Listeners\RabbitMQFailedEvent;
 
 class Connector implements \Illuminate\Queue\Connectors\ConnectorInterface
 {
@@ -84,6 +88,9 @@ class Connector implements \Illuminate\Queue\Connectors\ConnectorInterface
         $delayed_exchange = isset($config['delayed_exchange_id'])
             ? $this->exchanges->make($config['delayed_exchange_id'])
             : null;
+
+        if (isset($config['worker']) && $config['worker'] === 'horizon')
+            return new RabbitMQQueue($this->container, $connection, $queue, $timeout, $resume, $delayed_exchange);
 
         return new Queue($this->container, $connection, $queue, $timeout, $resume, $delayed_exchange);
     }

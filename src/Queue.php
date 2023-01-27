@@ -46,21 +46,30 @@ class Queue extends \Illuminate\Queue\Queue implements QueueContract
     protected $resume;
 
     /**
+     * The name of the default queue.
+     *
+     * @var string
+     */
+    protected $default;
+
+    /**
      * Create a new Queue instance.
      *
-     * @param Container      $container
-     * @param Context        $connection
-     * @param AmqpQueue      $queue
-     * @param int            $timeout
-     * @param bool           $resume
+     * @param Container $container
+     * @param Context $connection
+     * @param AmqpQueue $queue
+     * @param int $timeout
+     * @param bool $resume
      * @param AmqpTopic|null $delayed_exchange
+     * @param string $default
      */
     public function __construct(Container $container,
                                 Context $connection,
                                 AmqpQueue $queue,
                                 int $timeout = 0,
                                 bool $resume = false,
-                                ?AmqpTopic $delayed_exchange = null)
+                                ?AmqpTopic $delayed_exchange = null,
+                                string $default = "jobs")
     {
         $this->container        = $container;
         $this->connection       = $connection;
@@ -68,6 +77,7 @@ class Queue extends \Illuminate\Queue\Queue implements QueueContract
         $this->timeout          = \max(0, $timeout);
         $this->delayed_exchange = $delayed_exchange;
         $this->resume           = $resume;
+        $this->default = $default;
     }
 
     /**
@@ -300,5 +310,16 @@ class Queue extends \Illuminate\Queue\Queue implements QueueContract
     protected function sendMessage(Producer $producer, $destination, Message $message): void
     {
         $producer->send($destination, $message);
+    }
+
+    /**
+     * Gets a queue/destination, by default the queue option set on the connection.
+     *
+     * @param  null  $queue
+     * @return string
+     */
+    public function getQueue($queue = null): string
+    {
+        return $queue ?: $this->default;
     }
 }
