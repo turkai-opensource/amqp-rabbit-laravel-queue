@@ -15,7 +15,6 @@ use Enqueue\AmqpExt\AmqpContext as Context;
 use Enqueue\AmqpExt\AmqpConsumer as Consumer;
 use Enqueue\AmqpExt\AmqpProducer as Producer;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
-use function Symfony\Component\Translation\t;
 
 class Queue extends \Illuminate\Queue\Queue implements QueueContract
 {
@@ -53,24 +52,24 @@ class Queue extends \Illuminate\Queue\Queue implements QueueContract
      */
     protected $default;
 
-	/**
-	 * Create a new Queue instance.
-	 *
-	 * @param Container $container
-	 * @param Context $connection
-	 * @param AmqpQueue $queue
-	 * @param int $timeout
-	 * @param bool $resume
-	 * @param AmqpTopic|null $delayed_exchange
-	 * @param int|string $default
-	 */
+    /**
+     * Create a new Queue instance.
+     *
+     * @param Container $container
+     * @param Context $connection
+     * @param AmqpQueue $queue
+     * @param int $timeout
+     * @param bool $resume
+     * @param AmqpTopic|null $delayed_exchange
+     * @param string $default
+     */
     public function __construct(Container $container,
                                 Context $connection,
                                 AmqpQueue $queue,
                                 int $timeout = 0,
                                 bool $resume = false,
                                 ?AmqpTopic $delayed_exchange = null,
-                                int|string $default = "jobs")
+                                string $default = "jobs")
     {
         $this->container        = $container;
         $this->connection       = $connection;
@@ -78,11 +77,7 @@ class Queue extends \Illuminate\Queue\Queue implements QueueContract
         $this->timeout          = \max(0, $timeout);
         $this->delayed_exchange = $delayed_exchange;
         $this->resume           = $resume;
-
-        // Required for Horizon support.
-        // If there is no queue information, it uses the jobs queue by default
-        if (is_string($default))
-			$this->default = $default;
+        $this->default = $default;
     }
 
     /**

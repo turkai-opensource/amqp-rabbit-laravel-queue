@@ -80,18 +80,18 @@ class Connector implements \Illuminate\Queue\Connectors\ConnectorInterface
             throw new InvalidArgumentException('RabbitMQ queue ID was not passed');
         }
 
-        $connection = $this->connections->make((string) $config['connection'], );
+        $connection = $this->connections->make((string) $config['connection']);
         $queue      = $this->queues->make((string) $config['queue_id']);
         $timeout    = (int) ($config['timeout'] ?? 0);
         $resume     = (bool) ($config['resume'] ?? false);
 
         $delayed_exchange = isset($config['delayed_exchange_id'])
-            ? $this->exchanges->make((string) $config['delayed_exchange_id'], )
+            ? $this->exchanges->make((string) $config['delayed_exchange_id'])
             : null;
 
         if (isset($config['worker']) && $config['worker'] === 'horizon')
-            return new RabbitMQQueue($this->container, $connection, $queue, $timeout, $resume, $delayed_exchange, $config['queue_id']);
+            return new RabbitMQQueue($this->container, $connection, $queue, $timeout, $resume, $delayed_exchange);
 
-        return new Queue($this->container, $connection, $queue, $timeout, $resume, $delayed_exchange, $config['queue_id']);
+        return new Queue($this->container, $connection, $queue, $timeout, $resume, $delayed_exchange);
     }
 }
