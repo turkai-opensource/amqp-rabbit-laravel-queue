@@ -5,15 +5,12 @@ declare(strict_types = 1);
 namespace AvtoDev\AmqpRabbitLaravelQueue;
 
 use AvtoDev\AmqpRabbitLaravelQueue\Horizon\RabbitMQQueue;
-use InvalidArgumentException;
-use Illuminate\Container\Container;
-use AvtoDev\AmqpRabbitManager\QueuesFactoryInterface;
-use Illuminate\Contracts\Queue\Queue as QueueContract;
-use AvtoDev\AmqpRabbitManager\ExchangesFactoryInterface;
 use AvtoDev\AmqpRabbitManager\ConnectionsFactoryInterface;
-use AvtoDev\AmqpRabbitLaravelQueue\Horizon\RabbitMQQueue as HorizonRabbitMQQueue;
-use Illuminate\Queue\Events\JobFailed;
-use AvtoDev\AmqpRabbitLaravelQueue\Horizon\Listeners\RabbitMQFailedEvent;
+use AvtoDev\AmqpRabbitManager\ExchangesFactoryInterface;
+use AvtoDev\AmqpRabbitManager\QueuesFactoryInterface;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Queue\Queue as QueueContract;
+use InvalidArgumentException;
 
 class Connector implements \Illuminate\Queue\Connectors\ConnectorInterface
 {
