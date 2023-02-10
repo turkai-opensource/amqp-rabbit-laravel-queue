@@ -77,7 +77,7 @@ class Queue extends \Illuminate\Queue\Queue implements QueueContract
         $this->timeout          = \max(0, $timeout);
         $this->delayed_exchange = $delayed_exchange;
         $this->resume           = $resume;
-        $this->default = $default;
+        $this->default 			= $default;
     }
 
     /**
