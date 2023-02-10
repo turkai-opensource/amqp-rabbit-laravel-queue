@@ -64,7 +64,7 @@ class Connector implements \Illuminate\Queue\Connectors\ConnectorInterface
     /**
      * Establish a queue connection.
      *
-     * @param array<string, mixed> $config
+     * @param array<string, string|int|null> $config
      *
      * @throws InvalidArgumentException
      *
@@ -80,13 +80,13 @@ class Connector implements \Illuminate\Queue\Connectors\ConnectorInterface
             throw new InvalidArgumentException('RabbitMQ queue ID was not passed');
         }
 
-        $connection = $this->connections->make($config['connection']);
-        $queue      = $this->queues->make($config['queue_id']);
+        $connection = $this->connections->make((string) $config['connection']);
+        $queue      = $this->queues->make((string) $config['queue_id']);
         $timeout    = (int) ($config['timeout'] ?? 0);
         $resume     = (bool) ($config['resume'] ?? false);
 
         $delayed_exchange = isset($config['delayed_exchange_id'])
-            ? $this->exchanges->make($config['delayed_exchange_id'])
+            ? $this->exchanges->make((string) $config['delayed_exchange_id'])
             : null;
 
         if (isset($config['worker']) && $config['worker'] === 'horizon')

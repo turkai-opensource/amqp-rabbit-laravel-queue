@@ -111,6 +111,7 @@ class Queue extends \Illuminate\Queue\Queue implements QueueContract
     public function push($job, $data = '', $queue = null, ?int $priority = null): void
     {
         $options = [
+            'delay'    => null,
             'priority' => $priority,
         ];
 
@@ -124,7 +125,7 @@ class Queue extends \Illuminate\Queue\Queue implements QueueContract
     /**
      * @param string               $payload
      * @param string|null          $queue
-     * @param array<string, mixed> $options
+     * @param array{delay: \DateTimeInterface|int|\DateInterval|float|null, priority: int|null}|array{} $options
      *
      * @return void
      */
