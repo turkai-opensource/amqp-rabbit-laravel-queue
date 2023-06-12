@@ -30,10 +30,10 @@ class RabbitMQFailedEvent
     /**
      * Handle the event.
      *
-     * @param  LaravelJobFailed  $event
+     * @param  LaravelJobFailed|HorizonJobFailed $event
      * @return void
      */
-    public function handle(LaravelJobFailed $event): void
+    public function handle(LaravelJobFailed|HorizonJobFailed $event): void
     {
         if (! $event->job instanceof RabbitMQJob) {
             return;
